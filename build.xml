@@ -1227,7 +1227,7 @@ diagrams and hyperlinks to source code">
     </sequential>
   </target>
 
-  <target name="ivy-report">
+  <target name="ivy-report" depends="subfloor.resolve,compile,dist">
     <antcall target="subfloor.ivy-report"/>
     <ivy:resolve file="workbench/${ivyfile}" conf="${ivy.configs}" />
     <ivy:report xml="true" todir="${ivy.reports.dir}" />

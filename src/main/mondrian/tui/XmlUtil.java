@@ -16,7 +16,6 @@ import org.apache.xerces.impl.Constants;
 import org.apache.xerces.parsers.DOMParser;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
-import org.apache.xpath.domapi.XPathEvaluatorImpl;
 
 import org.w3c.dom.*;
 import org.w3c.dom.xpath.*;
@@ -29,6 +28,8 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 /**
  * Some XML parsing, validation and transform utility methods used
@@ -71,7 +72,6 @@ public class XmlUtil {
             "<?xml version='1.0'?>" + LINE_SEP
             + "<xsl:stylesheet " + LINE_SEP
             + "xmlns:xsl='http://www.w3.org/1999/XSL/Transform' " + LINE_SEP
-            + "xmlns:xalan='http://xml.apache.org/xslt' " + LINE_SEP
             + "xmlns:xsd='http://www.w3.org/2001/XMLSchema' " + LINE_SEP
             + "xmlns:ROW='urn:schemas-microsoft-com:xml-analysis:rowset' "
             + LINE_SEP
@@ -83,7 +83,7 @@ public class XmlUtil {
             + "<xsl:output method='xml'  " + LINE_SEP
             + "encoding='UTF-8' " + LINE_SEP
             + "indent='yes'  " + LINE_SEP
-            + "xalan:indent-amount='2'/> " + LINE_SEP
+            + "/> " + LINE_SEP
             + "  " + LINE_SEP
             + "<!-- consume '/' and apply --> " + LINE_SEP
             + "<xsl:template match='/'> " + LINE_SEP
@@ -130,7 +130,6 @@ public class XmlUtil {
             "<?xml version='1.0'?> " + LINE_SEP
             + "<xsl:stylesheet  " + LINE_SEP
             + "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'  " + LINE_SEP
-            + "xmlns:xalan='http://xml.apache.org/xslt' " + LINE_SEP
             + "xmlns:xsd='http://www.w3.org/2001/XMLSchema' " + LINE_SEP
             + "xmlns:ROW='urn:schemas-microsoft-com:xml-analysis:rowset' "
             + LINE_SEP
@@ -142,7 +141,7 @@ public class XmlUtil {
             + "<xsl:output method='xml'  " + LINE_SEP
             + "encoding='UTF-8' " + LINE_SEP
             + "indent='yes'  " + LINE_SEP
-            + "xalan:indent-amount='2'/> " + LINE_SEP
+            + "/> " + LINE_SEP
             + "<!-- consume '/' and apply --> " + LINE_SEP
             + "<xsl:template match='/'> " + LINE_SEP
             + "<xsl:apply-templates/> " + LINE_SEP
@@ -192,7 +191,6 @@ public class XmlUtil {
             "<?xml version='1.0'?>" + LINE_SEP
             + "<xsl:stylesheet " + LINE_SEP
             + "xmlns:xsl='http://www.w3.org/1999/XSL/Transform' " + LINE_SEP
-            + "xmlns:xalan='http://xml.apache.org/xslt' " + LINE_SEP
             + "xmlns:xsd='http://www.w3.org/2001/XMLSchema' " + LINE_SEP
             + "xmlns:ROW='urn:schemas-microsoft-com:xml-analysis:rowset' "
             + LINE_SEP
@@ -204,7 +202,7 @@ public class XmlUtil {
             + "<xsl:output method='xml'  " + LINE_SEP
             + "encoding='UTF-8' " + LINE_SEP
             + "indent='yes'  " + LINE_SEP
-            + "xalan:indent-amount='2'/> " + LINE_SEP
+            + "/> " + LINE_SEP
             + "  " + LINE_SEP
             + "<!-- consume '/' and apply --> " + LINE_SEP
             + "<xsl:template match='/'> " + LINE_SEP
@@ -240,7 +238,6 @@ public class XmlUtil {
             "<?xml version='1.0'?> " + LINE_SEP
             + "<xsl:stylesheet  " + LINE_SEP
             + "xmlns:xsl='http://www.w3.org/1999/XSL/Transform'  " + LINE_SEP
-            + "xmlns:xalan='http://xml.apache.org/xslt' " + LINE_SEP
             + "xmlns:xsd='http://www.w3.org/2001/XMLSchema' " + LINE_SEP
             + "xmlns:ROW='urn:schemas-microsoft-com:xml-analysis:rowset' "
             + LINE_SEP
@@ -252,7 +249,7 @@ public class XmlUtil {
             + "<xsl:output method='xml'  " + LINE_SEP
             + "encoding='UTF-8' " + LINE_SEP
             + "indent='yes'  " + LINE_SEP
-            + "xalan:indent-amount='2'/> " + LINE_SEP
+            + "/> " + LINE_SEP
             + "<!-- consume '/' and apply --> " + LINE_SEP
             + "<xsl:template match='/'> " + LINE_SEP
             + "<xsl:apply-templates/> " + LINE_SEP
@@ -569,11 +566,11 @@ public class XmlUtil {
         buf.append(" />");
 
         String docStr = buf.toString();
-        return parseString(docStr);
+        return parseString( docStr );
     }
 
     public static String makeSoapPath() {
-        return XmlUtil.makeSoapPath(SOAP_PREFIX);
+        return XmlUtil.makeSoapPath( SOAP_PREFIX );
     }
 
     // '/soapX:Envelope/soapX:Body/*'
@@ -598,7 +595,7 @@ public class XmlUtil {
     }
 
     public static String makeRootPathInSoapBody() {
-        return makeRootPathInSoapBody("xmla", XSD_PREFIX);
+        return makeRootPathInSoapBody( "xmla", XSD_PREFIX );
     }
 
     // '/xmla:DiscoverResponse/xmla:return/ROW/root/*'
@@ -628,7 +625,7 @@ public class XmlUtil {
         String xpath)
         throws XPathException
     {
-        return XmlUtil.selectAsString(node, xpath, node);
+        return XmlUtil.selectAsString( node, xpath, node );
     }
 
     public static String selectAsString(
@@ -638,7 +635,7 @@ public class XmlUtil {
         throws XPathException
     {
         XPathResult xpathResult = XmlUtil.select(node, xpath, namespaceNode);
-        return XmlUtil.convertToString(xpathResult, false);
+        return XmlUtil.convertToString( xpathResult, false );
     }
 
     public static Node[] selectAsNodes(
@@ -646,7 +643,7 @@ public class XmlUtil {
         String xpath)
         throws XPathException
     {
-        return XmlUtil.selectAsNodes(node, xpath, node);
+        return XmlUtil.selectAsNodes( node, xpath, node );
     }
 
     public static Node[] selectAsNodes(
@@ -665,12 +662,23 @@ public class XmlUtil {
         Node namespaceNode)
         throws XPathException
     {
-        XPathEvaluator evaluator = new XPathEvaluatorImpl();
-        XPathNSResolver resolver = evaluator.createNSResolver(namespaceNode);
+       // deprecated as of BACKLOG-4068
+       // XPathEvaluator evaluator = new XPathEvaluatorImpl();
+
+        try {
+
+            XPathFactory factory = XPathFactory.newInstance();
+            XPathEvaluator evaluator = (XPathEvaluator) factory.newXPath();
+            XPathNSResolver resolver = evaluator.createNSResolver( namespaceNode );
 
         return (XPathResult) evaluator.evaluate(
             xpath, contextNode, resolver,
             XPathResult.ANY_TYPE, null);
+
+        } catch( Exception e ) {
+            throw ( e instanceof XPathException ) ?
+                ( XPathException ) e : new XPathException( XPathException.TYPE_ERR, e.getMessage() );
+        }
     }
 
     /**
